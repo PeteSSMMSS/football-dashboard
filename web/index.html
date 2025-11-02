@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚽ Fußball Dashboard</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>⚽ Fußball Dashboard</h1>
+            <div id="last-update"></div>
+        </header>
+
+        <!-- Timeline (Horizontale Datumsleiste) -->
+        <section class="timeline-section">
+            <h2>📅 Kalender</h2>
+            <div class="timeline-scroll">
+                <div id="timeline" class="timeline"></div>
+            </div>
+        </section>
+
+        <!-- Tables Section (Tabellen) -->
+        <section class="tables-section">
+            <h2>📊 Tabellen & Qualifizierte Teams</h2>
+            <div class="tables-grid">
+                <!-- Bundesliga Tabelle -->
+                <div class="table-card">
+                    <div class="table-header bundesliga">
+                        <h3>🇩🇪 1. Bundesliga</h3>
+                    </div>
+                    <div class="table-container">
+                        <table id="bundesliga-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Team</th>
+                                    <th>Sp</th>
+                                    <th>Pkt</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="4" class="loading">Lade Tabelle...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Champions League Tabelle -->
+                <div class="table-card">
+                    <div class="table-header champions-league">
+                        <h3>🏆 Champions League</h3>
+                    </div>
+                    <div class="table-container">
+                        <table id="cl-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Team</th>
+                                    <th>Sp</th>
+                                    <th>Pkt</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="4" class="loading">Lade Tabelle...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- DFB-Pokal Teams -->
+                <div class="table-card">
+                    <div class="table-header dfb-pokal">
+                        <h3>🏅 DFB-Pokal Teams</h3>
+                        <span class="round-badge" id="pokal-round">Achtelfinale</span>
+                    </div>
+                    <div class="teams-container" id="pokal-teams">
+                        <div class="loading">Lade Teams...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Matches Grid -->
+        <div class="matches-grid">
+            <!-- Bundesliga -->
+            <section class="competition-section">
+                <div class="competition-header bundesliga">
+                    <h2>🇩🇪 1. Bundesliga</h2>
+                    <span class="match-count" id="bundesliga-count">0</span>
+                </div>
+                <div id="bundesliga-matches" class="matches-list">
+                    <div class="loading">Lade Spiele...</div>
+                </div>
+            </section>
+
+            <!-- Champions League -->
+            <section class="competition-section">
+                <div class="competition-header champions-league">
+                    <h2>🏆 Champions League</h2>
+                    <span class="match-count" id="cl-count">0</span>
+                </div>
+                <div id="cl-matches" class="matches-list">
+                    <div class="loading">Lade Spiele...</div>
+                </div>
+            </section>
+
+            <!-- DFB-Pokal -->
+            <section class="competition-section">
+                <div class="competition-header dfb-pokal">
+                    <h2>🏅 DFB-Pokal</h2>
+                    <span class="match-count" id="pokal-count">0</span>
+                </div>
+                <div id="pokal-matches" class="matches-list">
+                    <div class="loading">Lade Spiele...</div>
+                </div>
+            </section>
+
+            <!-- Deutschland Nationalmannschaft -->
+            <section class="competition-section">
+                <div class="competition-header germany">
+                    <h2>🇩🇪 Deutschland</h2>
+                    <span class="match-count" id="germany-count">0</span>
+                </div>
+                <div id="germany-matches" class="matches-list">
+                    <div class="loading">Lade Spiele...</div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>Daten von OpenLigaDB & ESPN API • Aktualisiert alle 60 Minuten</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
