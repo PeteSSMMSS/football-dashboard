@@ -1,16 +1,21 @@
 # ⚽ Fußball Dashboard
 
-Minimalistisches One-Page Dashboard für Fußball-Spieltermine aus Bundesliga, Champions League und DFB-Pokal.
+Minimalistisches One-Page Dashboard für Fußball-Spieltermine aus Bundesliga, Champions League, DFB-Pokal und Deutschland Nationalmannschaft.
+
+![Dashboard Screenshot](screenshot.png)
 
 ## 🎯 Features
 
-- **📅 Timeline**: Horizontale Monatsansicht mit Spielterminen
-- **🇩🇪 1. Bundesliga**: Nächste Spiele aus der OpenLigaDB API
-- **🏆 Champions League**: Aktuelle Spiele von ESPN API
-- **🏅 DFB-Pokal**: Pokalspiele aus OpenLigaDB
-- **🎨 Modern & Minimal**: Dark Theme, schnelles Laden, responsive
-- **🔄 Auto-Update**: Daten werden stündlich aktualisiert
-- **🐳 Docker Ready**: Einfaches Deployment
+- **📅 30-Tage Kalender**: Horizontale Monatsansicht mit Spielterminen und Match-Counter
+- **🇩🇪 1. Bundesliga**: Live-Tabelle + nächste Spiele aus OpenLigaDB
+- **🏆 Champions League**: Live-Tabelle + aktuelle Spiele von ESPN API
+- **🏅 DFB-Pokal**: Zukünftige Pokalspiele + verbleibende Teams
+- **🇩🇪 Deutschland**: WM-Qualifikation Spiele der Nationalmannschaft
+- **📊 Live-Tabellen**: Bundesliga & Champions League Standings
+- **🎨 Modern & Minimal**: Dark Theme mit Gradient-Design pro Wettbewerb
+- **🔄 Auto-Update**: Daten werden stündlich automatisch aktualisiert
+- **� Responsive**: Optimiert für Desktop & Mobile
+- **⚡ Schnell**: Vanilla JS, keine Frameworks
 
 ## 🚀 Lokales Testing
 
@@ -25,7 +30,7 @@ Minimalistisches One-Page Dashboard für Fußball-Spieltermine aus Bundesliga, C
 cd football-dashboard
 
 # Dependencies installieren
-pip install -r api/requirements.txt
+pip install -r requirements.txt
 
 # Server starten
 python api/main.py
