@@ -462,7 +462,7 @@ function showError(message) {
 // ============================================================================
 
 /**
- * Rendert vertikale Mobile Timeline (nur Spiele, chronologisch)
+ * Rendert vertikale Mobile Timeline (nur Spiele, chronologisch, einklappbar)
  */
 function renderMobileTimeline() {
     const container = document.getElementById('mobile-timeline-container');
@@ -505,21 +505,41 @@ function renderMobileTimeline() {
     // Limitiere auf 30 Tage
     const limitedDates = sortedDates.slice(0, 30);
     
-    limitedDates.forEach(dateKey => {
+    limitedDates.forEach((dateKey, index) => {
         const games = gamesByDay[dateKey];
         const date = new Date(dateKey);
         const formatted = formatDate(date.toISOString());
         const isToday = dateKey === today.toISOString().split('T')[0];
         
+        // Ermittle unique Competitions für Dots
+        const competitions = [...new Set(games.map(g => g.competition))];
+        const competitionDots = competitions.map(comp => 
+            `<span class="mobile-comp-dot ${comp}"></span>`
+        ).join('');
+        
+        // CSS-Klasse wenn nur eine Competition
+        let headerClass = '';
+        if (competitions.length === 1) {
+            headerClass = `only-${competitions[0]}`;
+        }
+        
         html += `
-            <div class="mobile-day-card">
-                <div class="mobile-day-header ${isToday ? 'today' : ''}">
-                    <div class="mobile-day-date">
-                        ${formatted.dayName}, ${formatted.day}. ${formatted.month} ${formatted.year}
+            <div class="mobile-day-card" data-day="${index}">
+                <div class="mobile-day-header ${isToday ? 'today' : ''} ${headerClass}" onclick="toggleMobileDay(${index})">
+                    <div class="mobile-day-left">
+                        <span class="mobile-expand-icon">▶</span>
+                        <div class="mobile-day-date">
+                            ${formatted.dayName}, ${formatted.day}. ${formatted.month}
+                        </div>
                     </div>
-                    <div class="mobile-day-count">${games.length} ${games.length === 1 ? 'Spiel' : 'Spiele'}</div>
+                    <div class="mobile-day-right">
+                        <div class="mobile-competition-dots">
+                            ${competitionDots}
+                        </div>
+                        <div class="mobile-day-count">${games.length}</div>
+                    </div>
                 </div>
-                <div class="mobile-day-matches">
+                <div class="mobile-day-matches" id="mobile-day-${index}">
         `;
         
         games.forEach(game => {
@@ -541,7 +561,7 @@ function renderMobileTimeline() {
                         <div class="mobile-team">vs</div>
                         <div class="mobile-team">${game.team_away}</div>
                     </div>
-                    ${game.location || game.round ? `
+                    ${game.location || game.round || game.matchday ? `
                         <div class="mobile-match-info">
                             ${game.location ? `<span>📍 ${game.location}</span>` : ''}
                             ${game.round ? `<span>${game.round}</span>` : ''}
@@ -559,6 +579,28 @@ function renderMobileTimeline() {
     });
     
     container.innerHTML = html || '<div class="loading">Keine kommenden Spiele</div>';
+}
+
+/**
+ * Toggle Day Expansion (Mobile)
+ */
+function toggleMobileDay(dayIndex) {
+    const header = document.querySelector(`[data-day="${dayIndex}"] .mobile-day-header`);
+    const matches = document.getElementById(`mobile-day-${dayIndex}`);
+    
+    if (!header || !matches) return;
+    
+    const isExpanded = header.classList.contains('expanded');
+    
+    if (isExpanded) {
+        // Zuklappen
+        header.classList.remove('expanded');
+        matches.classList.remove('expanded');
+    } else {
+        // Aufklappen
+        header.classList.add('expanded');
+        matches.classList.add('expanded');
+    }
 }
 
 // ============================================================================
