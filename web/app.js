@@ -306,6 +306,7 @@ function renderMatches(matches, containerId, competition) {
  */
 function updateUI() {
     renderTimeline();
+    renderMobileTimeline(); // Mobile Timeline
     renderTables();
     renderMatches(allMatches.bundesliga, 'bundesliga-matches', 'bundesliga');
     renderMatches(allMatches.champions_league, 'cl-matches', 'champions-league');
@@ -454,6 +455,110 @@ function showError(message) {
         const container = document.getElementById(id);
         container.innerHTML = `<div class="no-matches">❌ ${message}</div>`;
     });
+}
+
+// ============================================================================
+// MOBILE TIMELINE
+// ============================================================================
+
+/**
+ * Rendert vertikale Mobile Timeline (nur Spiele, chronologisch)
+ */
+function renderMobileTimeline() {
+    const container = document.getElementById('mobile-timeline-container');
+    if (!container) return;
+    
+    // Sammle alle Spiele
+    const allGames = [
+        ...allMatches.bundesliga.map(m => ({ ...m, competition: 'bundesliga', competitionName: 'Bundesliga' })),
+        ...allMatches.champions_league.map(m => ({ ...m, competition: 'champions-league', competitionName: 'Champions League' })),
+        ...allMatches.dfb_pokal.map(m => ({ ...m, competition: 'dfb-pokal', competitionName: 'DFB-Pokal' })),
+        ...allMatches.germany.map(m => ({ ...m, competition: 'germany', competitionName: 'Nationalmannschaft' }))
+    ];
+    
+    // Sortiere nach Datum
+    allGames.sort((a, b) => new Date(a.date) - new Date(b.date));
+    
+    // Gruppiere nach Tag
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const gamesByDay = {};
+    allGames.forEach(game => {
+        const gameDate = new Date(game.date);
+        gameDate.setHours(0, 0, 0, 0);
+        
+        // Nur zukünftige Spiele (ab heute)
+        if (gameDate >= today) {
+            const dateKey = gameDate.toISOString().split('T')[0];
+            if (!gamesByDay[dateKey]) {
+                gamesByDay[dateKey] = [];
+            }
+            gamesByDay[dateKey].push(game);
+        }
+    });
+    
+    // Rendere Timeline
+    let html = '';
+    const sortedDates = Object.keys(gamesByDay).sort();
+    
+    // Limitiere auf 30 Tage
+    const limitedDates = sortedDates.slice(0, 30);
+    
+    limitedDates.forEach(dateKey => {
+        const games = gamesByDay[dateKey];
+        const date = new Date(dateKey);
+        const formatted = formatDate(date.toISOString());
+        const isToday = dateKey === today.toISOString().split('T')[0];
+        
+        html += `
+            <div class="mobile-day-card">
+                <div class="mobile-day-header ${isToday ? 'today' : ''}">
+                    <div class="mobile-day-date">
+                        ${formatted.dayName}, ${formatted.day}. ${formatted.month} ${formatted.year}
+                    </div>
+                    <div class="mobile-day-count">${games.length} ${games.length === 1 ? 'Spiel' : 'Spiele'}</div>
+                </div>
+                <div class="mobile-day-matches">
+        `;
+        
+        games.forEach(game => {
+            const competitionEmoji = {
+                'bundesliga': '⚽',
+                'champions-league': '🏆',
+                'dfb-pokal': '🏅',
+                'germany': '🇩🇪'
+            }[game.competition] || '⚽';
+            
+            html += `
+                <div class="mobile-match-card ${game.competition}">
+                    <div class="mobile-match-time">
+                        <span>${game.time} Uhr</span>
+                        <span class="mobile-match-competition">${competitionEmoji} ${game.competitionName}</span>
+                    </div>
+                    <div class="mobile-match-teams">
+                        <div class="mobile-team">${game.team_home}</div>
+                        <div class="mobile-team">vs</div>
+                        <div class="mobile-team">${game.team_away}</div>
+                    </div>
+                    ${game.location || game.round ? `
+                        <div class="mobile-match-info">
+                            ${game.location ? `<span>📍 ${game.location}</span>` : ''}
+                            ${game.round ? `<span>${game.round}</span>` : ''}
+                            ${game.matchday ? `<span>Spieltag ${game.matchday}</span>` : ''}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        });
+        
+        html += `
+                </div>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html || '<div class="loading">Keine kommenden Spiele</div>';
 }
 
 // ============================================================================

@@ -762,7 +762,34 @@ tbody td {
     box-shadow: 0 4px 12px rgba(0, 104, 55, 0.3);
 }
 
+/* ============================================================================
+   MOBILE OPTIMIERUNG
+   ============================================================================ */
+
 @media (max-width: 768px) {
+    /* Header kompakter */
+    header h1 {
+        font-size: 1.5rem;
+    }
+    
+    #last-update {
+        font-size: 0.7rem;
+    }
+    
+    /* VERSTECKE: Timeline, Tabellen, Competition-Sections */
+    .timeline-section,
+    .tables-section,
+    .matches-section {
+        display: none !important;
+    }
+    
+    /* ZEIGE: Mobile Timeline */
+    .mobile-timeline {
+        display: block !important;
+        padding: 1rem;
+    }
+    
+    /* Tabellen Grid */
     .tables-grid {
         grid-template-columns: 1fr;
     }
@@ -775,4 +802,111 @@ tbody td {
         max-width: 100px;
     }
 }
+
+/* Mobile Timeline Container */
+.mobile-timeline {
+    display: none; /* Hidden on desktop */
+    max-width: 100%;
+}
+
+/* Mobile Day Card */
+.mobile-day-card {
+    margin-bottom: 1.5rem;
+}
+
+.mobile-day-header {
+    background: linear-gradient(135deg, #1a2332 0%, #0a0e1a 100%);
+    padding: 0.75rem 1rem;
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--accent-today);
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mobile-day-header.today {
+    border-left-color: var(--accent-today);
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, #1a2332 100%);
+}
+
+.mobile-day-date {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.mobile-day-count {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: var(--accent-today);
+}
+
+/* Mobile Match Card */
+.mobile-match-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    border-left: 3px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.mobile-match-card:hover {
+    transform: translateX(4px);
+    background: var(--bg-card-hover);
+}
+
+.mobile-match-card.bundesliga {
+    border-left-color: var(--accent-bundesliga);
+}
+
+.mobile-match-card.champions-league {
+    border-left-color: var(--accent-cl);
+}
+
+.mobile-match-card.dfb-pokal {
+    border-left-color: var(--accent-pokal);
+}
+
+.mobile-match-card.germany {
+    border-left-color: #ffce00;
+}
+
+.mobile-match-time {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mobile-match-competition {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.mobile-match-teams {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.mobile-team {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.mobile-match-info {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+}
+
 
