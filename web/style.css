@@ -861,11 +861,11 @@ tbody td {
     background: var(--accent-bundesliga);
 }
 
-.mobile-day-header.only-cl::before {
+.mobile-day-header.only-champions-league::before {
     background: var(--accent-cl);
 }
 
-.mobile-day-header.only-pokal::before {
+.mobile-day-header.only-dfb-pokal::before {
     background: var(--accent-pokal);
 }
 
