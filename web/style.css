@@ -785,7 +785,8 @@ tbody td {
     /* VERSTECKE: Timeline, Tabellen, Competition-Sections */
     .timeline-section,
     .tables-section,
-    .matches-section {
+    .matches-section,
+    .competition-section {
         display: none !important;
     }
     

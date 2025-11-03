@@ -479,18 +479,26 @@ function renderMobileTimeline() {
     // Sortiere nach Datum
     allGames.sort((a, b) => new Date(a.date) - new Date(b.date));
     
-    // Gruppiere nach Tag
+    // Gruppiere nach Tag (LOCAL TIMEZONE FIX)
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
     const gamesByDay = {};
     allGames.forEach(game => {
+        // Parse als lokales Datum (nicht UTC!)
         const gameDate = new Date(game.date);
-        gameDate.setHours(0, 0, 0, 0);
+        
+        // Extrahiere nur Datum ohne Timezone-Shift
+        const year = gameDate.getFullYear();
+        const month = gameDate.getMonth();
+        const day = gameDate.getDate();
+        
+        // Erstelle neues lokales Datum
+        const localDate = new Date(year, month, day);
         
         // Nur zukünftige Spiele (ab heute)
-        if (gameDate >= today) {
-            const dateKey = gameDate.toISOString().split('T')[0];
+        if (localDate >= today) {
+            const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             if (!gamesByDay[dateKey]) {
                 gamesByDay[dateKey] = [];
             }
@@ -507,11 +515,14 @@ function renderMobileTimeline() {
     
     limitedDates.forEach((dateKey, index) => {
         const games = gamesByDay[dateKey];
-        const date = new Date(dateKey);
+        const date = new Date(dateKey + 'T12:00:00'); // Mittagszeit um Timezone-Issues zu vermeiden
         const formatted = formatDate(date.toISOString());
-        const isToday = dateKey === today.toISOString().split('T')[0];
         
-        // Ermittle unique Competitions für Dots
+        // Vergleiche Datum-Strings
+        const todayKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        const isToday = dateKey === todayKey;
+        
+        // Ermittle unique Competitions für Dots (NUR für diesen Tag!)
         const competitions = [...new Set(games.map(g => g.competition))];
         const competitionDots = competitions.map(comp => 
             `<span class="mobile-comp-dot ${comp}"></span>`
